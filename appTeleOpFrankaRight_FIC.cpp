@@ -70,7 +70,7 @@ Eigen::VectorXd readJointPosGlobalVar(7);
 Eigen::VectorXd wrenchStiffnessGlobalVar(6);
 
 // DEMO_exp 
-float virtConstraintSize = 0.1;
+float virtConstraintSize = 0.05;
 float virtConstraintRotSize = 0.785398;
 double dualArmActivate = 1;
 double trajectoryActPhase = 0;
@@ -109,6 +109,7 @@ Eigen::VectorXd FeedBackForce_Delayed(3);
 int countBuff = 0;
 int vecSize = 1000;
 int timeDelayBuffSize = 1000;
+float feedBackCoeff_Pos = 0.5;
 
 // FRANKA
 Eigen::VectorXf buffVec_PosX(vecSize);
@@ -209,7 +210,7 @@ float frankaDesPosHapticCtl = 1;
 // DEMO 
 float gripperAct = 1;
 float hapticVirtConstFeedBackAct = 1;
-float hapticOptoForceSensorAct = 1;
+float hapticOptoForceSensorAct = 0;
 
 //DEMO
 int lowBandwidth_Franka_FIC_Act = 0;
@@ -553,12 +554,12 @@ void teleOp::calculate_Kc_constDampAngular_FmidCtrl_Fctrl_ORI(Eigen::MatrixXf &K
 
 // DEMO_exp
 float virtConstraintSize_Franka = 0.05;
-float virtConstraintRotSize_Franka = 0.0872665;
+float virtConstraintRotSize_Franka = 0.785398;
  
 // 1.5708 ==> 90 degrees
 // 1.0472 ==> 60 degrees
 // 0.785398 ==> 45 degrees
-// 0.523599==> 30 degrees
+// 0.523599 ==> 30 degrees
 // 0.349066 ==> 20 degrees
 // 0.3054326 ==> 17.5 degrees
 // 0.261799 ==> 15 degrees
@@ -749,15 +750,15 @@ public:
 
 	// CONTROLLER CLASSES
 	void calculate_K_Max_Beta_Pos_Ori_Franka(Eigen::VectorXf &F_MAX, Eigen::VectorXf &Max_Disp, Eigen::VectorXf &Tau_MAX, Eigen::VectorXf &Max_Disp_Ori, Eigen::MatrixXf &K_Max_System, Eigen::VectorXf &Beta ,Eigen::MatrixXf &K_Max_System_Ori, Eigen::VectorXf &Beta_Ori, int i);
-  void get_K_Total_Pos_Ori_Franka(Eigen::VectorXf &Beta, Eigen::MatrixXf &K_Var_Pos, Eigen::MatrixXf &K_Total_Des_Pos, Eigen::VectorXf &Beta_Ori, Eigen::MatrixXf &K_Var_Ori, Eigen::MatrixXf &K_Total_Des_Ori, int i);
+  	void get_K_Total_Pos_Ori_Franka(Eigen::VectorXf &Beta, Eigen::MatrixXf &K_Var_Pos, Eigen::MatrixXf &K_Total_Des_Pos, Eigen::VectorXf &Beta_Ori, Eigen::MatrixXf &K_Var_Ori, Eigen::MatrixXf &K_Total_Des_Ori, int i);
 	void get_K_Total_Pos_Ori_Franka_V2(Eigen::VectorXf &Beta, Eigen::MatrixXf &K_Var_Pos, Eigen::MatrixXf &K_Total_Des_Pos, Eigen::VectorXf &Beta_Ori, Eigen::MatrixXf &K_Var_Ori, Eigen::MatrixXf &K_Total_Des_Ori, Eigen::MatrixXf &K_Max_System, Eigen::MatrixXf &K_Max_System_Ori, int i);    
 	void calculate_F_Max_Franka(Eigen::VectorXf &Max_Disp, Eigen::VectorXf &F_Max, int i);
-  void calculate_Tau_Max_Franka(Eigen::VectorXf &Max_Disp_Ori, Eigen::VectorXf &Tau_Max, int i);
-  void boxShaping_Online_Franka(Eigen::VectorXf &Max_Disp, int i);
-  void calculation_K1_K2_Kd_Max_PMax_PMid_Max_Dist_Vec_Franka(Eigen::MatrixXf &K1, Eigen::MatrixXf &K2, Eigen::MatrixXf &Kd_Max, Eigen::VectorXf &Pmax, Eigen::VectorXf &Pmid, Eigen::VectorXf &Max_Dist_Vec, Eigen::VectorXf &Beta, Eigen::MatrixXf &K_Max_System, Eigen::VectorXf &Max_Disp, Eigen::VectorXf &F_Max, int i);
-  void calculation_K1_K2_Kd_Max_PMax_PMid_Max_Dist_Vec_Ori_Franka(Eigen::MatrixXf &K1_Ori, Eigen::MatrixXf &K2_Ori, Eigen::MatrixXf &Kd_Max_Ori, Eigen::VectorXf &Pmax_Ori, Eigen::VectorXf &Pmid_Ori, Eigen::VectorXf &Max_Dist_Vec_Ori, Eigen::VectorXf &Beta_Ori, Eigen::MatrixXf &K_Max_System_Ori, Eigen::VectorXf &Max_Disp_Ori, Eigen::VectorXf &Tau_Max, int i);
-  void calculation_Kc_DampConstLiner_FMidCtrl_FkCtrl_Franka(Eigen::MatrixXf &Kc, Eigen::MatrixXf &DampConstLinear, Eigen::VectorXf &FMidCtrl, Eigen::VectorXf &FkCtrl, int i);
-  void calculation_Kc_DampConstAngular_FMidCtrl_FkCtrl_Ori_Franka(Eigen::MatrixXf &Kc_Ori, Eigen::MatrixXf &DampConstAngular, Eigen::VectorXf &FMidCtrl_Ori, Eigen::VectorXf &FkCtrl_Ori, int i);
+  	void calculate_Tau_Max_Franka(Eigen::VectorXf &Max_Disp_Ori, Eigen::VectorXf &Tau_Max, int i);
+  	void boxShaping_Online_Franka(Eigen::VectorXf &Max_Disp, int i);
+  	void calculation_K1_K2_Kd_Max_PMax_PMid_Max_Dist_Vec_Franka(Eigen::MatrixXf &K1, Eigen::MatrixXf &K2, Eigen::MatrixXf &Kd_Max, Eigen::VectorXf &Pmax, Eigen::VectorXf &Pmid, Eigen::VectorXf &Max_Dist_Vec, Eigen::VectorXf &Beta, Eigen::MatrixXf &K_Max_System, Eigen::VectorXf &Max_Disp, Eigen::VectorXf &F_Max, int i);
+  	void calculation_K1_K2_Kd_Max_PMax_PMid_Max_Dist_Vec_Ori_Franka(Eigen::MatrixXf &K1_Ori, Eigen::MatrixXf &K2_Ori, Eigen::MatrixXf &Kd_Max_Ori, Eigen::VectorXf &Pmax_Ori, Eigen::VectorXf &Pmid_Ori, Eigen::VectorXf &Max_Dist_Vec_Ori, Eigen::VectorXf &Beta_Ori, Eigen::MatrixXf &K_Max_System_Ori, Eigen::VectorXf &Max_Disp_Ori, Eigen::VectorXf &Tau_Max, int i);
+  	void calculation_Kc_DampConstLiner_FMidCtrl_FkCtrl_Franka(Eigen::MatrixXf &Kc, Eigen::MatrixXf &DampConstLinear, Eigen::VectorXf &FMidCtrl, Eigen::VectorXf &FkCtrl, int i);
+  	void calculation_Kc_DampConstAngular_FMidCtrl_FkCtrl_Ori_Franka(Eigen::MatrixXf &Kc_Ori, Eigen::MatrixXf &DampConstAngular, Eigen::VectorXf &FMidCtrl_Ori, Eigen::VectorXf &FkCtrl_Ori, int i);
 
 	template <typename T> static int sgn (const T &val, const T &eps = T(0)){
 		return (T(eps) < val) - (val < T(-eps));
@@ -1237,11 +1238,11 @@ static void mainHaptic() {
   	printf ("NOTE: 2 devices detected\n");
   }
   
-  if ((deviceID0 = drdOpenID (0)) < 0) {
-    printf ("error: %s\n", dhdErrorGetLastStr ());
-  }
+//   if ((deviceID0 = drdOpenID (0)) < 0) {
+//     printf ("error: %s\n", dhdErrorGetLastStr ());
+//   }
  
-  // open the second available device
+//   // open the second available device
   if ((deviceID1 = drdOpenID (1)) < 0) {
     printf ("error: %s\n", dhdErrorGetLastStr ());
   }
@@ -1336,12 +1337,12 @@ static void mainHaptic() {
   int done   = 0;
 
 	// DEMO_exp
-	//maxDisp.setConstant(virtConstraintSize);
+	maxDisp.setConstant(virtConstraintSize);
 	maxDisp_Ori.setConstant(virtConstraintRotSize);
 
-	maxDisp[0] = 0.05;
-	maxDisp[1] = 0.05;
-	maxDisp[2] = 0.05;
+	// maxDisp[0] = 0.05;
+	// maxDisp[1] = 0.05;
+	// maxDisp[2] = 0.05;
 
 	teleOp teleOp;
 
@@ -1720,13 +1721,14 @@ if (std_lowBandwidth_timeDelay_TeleOp_FIC_Act == 0){
 	if (gripperAct == 1){ 
 	      
       // HOLDING THE GRIPPER FOR GRAVITY COMPENSATION ACTIVATION
-      if (gripperGapVec[0] < 0.001){
+      if (abs(gripperGapVec[0]) < 0.001){
+		  std::cout << "right haptic gripper gap value: " << abs(gripperGapVec[0]) << std::endl;
           if (hapticVirtConstFeedBackAct == 0){
-					  res = drdSetForceAndTorqueAndGripperForce(0, 0, 0, 0, 0, 0, F_haptic_thumbFing[0] + F_haptic_thumbFing[1] + F_haptic_thumbFing[2]);
+					  res = drdSetForceAndTorqueAndGripperForce(Wrench_FIC_Sigma_doubleType[0], Wrench_FIC_Sigma_doubleType[1], Wrench_FIC_Sigma_doubleType[2], Wrench_FIC_Sigma_doubleType[3], Wrench_FIC_Sigma_doubleType[4], Wrench_FIC_Sigma_doubleType[5], F_haptic_thumbFing[0] + F_haptic_thumbFing[1] + F_haptic_thumbFing[2]);
 					}else{
 					  if (hapticOptoForceSensorAct == 0){
 						    //WITH FIC HAPTIC FORCE FEDDBACK
-						    res = drdSetForceAndTorqueAndGripperForce(0 - 1 * Wrench_FIC_Franka_doubleType[0], 0 - 1 * Wrench_FIC_Franka_doubleType[1], 0 - 1 * Wrench_FIC_Franka_doubleType[2], 0 - 0.015 * Wrench_FIC_Franka_doubleType[3], 0 - 0.015 * Wrench_FIC_Franka_doubleType[4], 0 - 0.015 * Wrench_FIC_Franka_doubleType[5], F_haptic_thumbFing[0] + F_haptic_thumbFing[1] + F_haptic_thumbFing[2]);
+						    res = drdSetForceAndTorqueAndGripperForce(Wrench_FIC_Sigma_doubleType[0] + feedBackCoeff_Pos * Wrench_FIC_Franka_doubleType[0], Wrench_FIC_Sigma_doubleType[1] + feedBackCoeff_Pos * Wrench_FIC_Franka_doubleType[1], Wrench_FIC_Sigma_doubleType[2] + feedBackCoeff_Pos * Wrench_FIC_Franka_doubleType[2], Wrench_FIC_Sigma_doubleType[3] - 0.015 * Wrench_FIC_Franka_doubleType[3], Wrench_FIC_Sigma_doubleType[4] - 0.015 * Wrench_FIC_Franka_doubleType[4], Wrench_FIC_Sigma_doubleType[5] - 0.015 * Wrench_FIC_Franka_doubleType[5], F_haptic_thumbFing[0] + F_haptic_thumbFing[1] + F_haptic_thumbFing[2]);
 					  }else if (hapticOptoForceSensorAct == 1){
 					      //WITH OPTO FT SENSOR FORCE FEDDBACK
 					      res = drdSetForceAndTorqueAndGripperForce(0 - optoFT_forceCoef * optoForceY.load(), 0 - optoFT_forceCoef * optoForceX.load(), 0 - optoFT_forceCoef * optoForceZ.load(), 0 - optoFT_torqueCoef * optoTorqueX.load(), 0 -  optoFT_torqueCoef * optoTorqueY.load(), 0 - optoFT_torqueCoef * optoTorqueZ.load(), F_haptic_thumbFing[0] + F_haptic_thumbFing[1] + F_haptic_thumbFing[2]);
@@ -1740,7 +1742,7 @@ if (std_lowBandwidth_timeDelay_TeleOp_FIC_Act == 0){
 					}else{
 						  if (hapticOptoForceSensorAct == 0){
 						    //WITH FIC HAPTIC FORCE FEDDBACK
-						    res = drdSetForceAndTorqueAndGripperForce(Wrench_FIC_Sigma_doubleType[0] - 1 * Wrench_FIC_Franka_doubleType[0], Wrench_FIC_Sigma_doubleType[1] - 1 * Wrench_FIC_Franka_doubleType[1], Wrench_FIC_Sigma_doubleType[2] - 1 * Wrench_FIC_Franka_doubleType[2], Wrench_FIC_Sigma_doubleType[3] - 0.015 * Wrench_FIC_Franka_doubleType[3], Wrench_FIC_Sigma_doubleType[4] - 0.015 * Wrench_FIC_Franka_doubleType[4], Wrench_FIC_Sigma_doubleType[5] - 0.015 * Wrench_FIC_Franka_doubleType[5], F_haptic_thumbFing[0] + F_haptic_thumbFing[1] + F_haptic_thumbFing[2]);
+						    res = drdSetForceAndTorqueAndGripperForce(Wrench_FIC_Sigma_doubleType[0] + feedBackCoeff_Pos * Wrench_FIC_Franka_doubleType[0], Wrench_FIC_Sigma_doubleType[1] + feedBackCoeff_Pos * Wrench_FIC_Franka_doubleType[1], Wrench_FIC_Sigma_doubleType[2] + feedBackCoeff_Pos * Wrench_FIC_Franka_doubleType[2], Wrench_FIC_Sigma_doubleType[3] + 0.015 * Wrench_FIC_Franka_doubleType[3], Wrench_FIC_Sigma_doubleType[4] + 0.015 * Wrench_FIC_Franka_doubleType[4], Wrench_FIC_Sigma_doubleType[5] + 0.015 * Wrench_FIC_Franka_doubleType[5], F_haptic_thumbFing[0] + F_haptic_thumbFing[1] + F_haptic_thumbFing[2]);
 					    }else if (hapticOptoForceSensorAct == 1){
 					      //WITH OPTO FT SENSOR FORCE FEDDBACK
 					      res = drdSetForceAndTorqueAndGripperForce(Wrench_FIC_Sigma_doubleType[0] - optoFT_forceCoef * optoForceY.load(), Wrench_FIC_Sigma_doubleType[1] - optoFT_forceCoef * optoForceX.load(), Wrench_FIC_Sigma_doubleType[2] - optoFT_forceCoef * optoForceZ.load(), Wrench_FIC_Sigma_doubleType[3] - optoFT_torqueCoef * optoTorqueX.load(), Wrench_FIC_Sigma_doubleType[4] - optoFT_torqueCoef * optoTorqueY.load(), Wrench_FIC_Sigma_doubleType[5] - optoFT_torqueCoef * optoTorqueZ.load(), F_haptic_thumbFing[0] + F_haptic_thumbFing[1] + F_haptic_thumbFing[2]);
@@ -2130,11 +2132,11 @@ static void mainFranka(const char* frankaIP){
 		//initial_configuration_Franka = 0;
 
 		//INITIAL CONFIGURATION FOR BILATERAL TELEOPERATION
-		//std::array<double, 7> postureGoal = {{-0.164892, -0.339858, -0.384224, -2.37786, -0.122578, 2.10618, 0.335746}}; //-0.122578 --> 5
+		// std::array<double, 7> postureGoal = {{-0.164892, -0.339858, -0.384224, -2.37786, -0.122578, 2.10618, 0.335746}}; //-0.122578 --> 5
 		
 		// 45 degree ang: -0.129699 -0.228457 -0.493685  -2.17448  0.144543   1.80917  0.124129
 		//std::array<double, 7> postureGoal = {{-0.129699,-0.228457, -0.493685,  -2.17448,  0.144543,   1.80917,  0.124129}}; //-0.122578 --> 5
-		//initial_configuration_Franka = 1;
+		// initial_configuration_Franka = 1;
 		
 		//INITIAL CONFIGURATION FOR BILATERAL TELEOPERATION
 		std::array<double, 7> postureGoal = {{0.0, -M_PI_4, 0.0, -3.0*M_PI_4, -M_PI_2, M_PI_2, M_PI_4}}; 
@@ -2267,6 +2269,7 @@ static void mainFranka(const char* frankaIP){
          	newTargetCartMat(2,1) = 0;
          	newTargetCartMat(2,2) = 1;
          	
+         	// 45 Degree Drilling
          	//newTargetCartMat(1,1) = 0.70;
          	//newTargetCartMat(1,2) = -0.70;
          	//newTargetCartMat(2,1) = 0.70;
@@ -2348,13 +2351,13 @@ static void mainFranka(const char* frankaIP){
           targetCartVel = filterTargetVel.value();
 
 					// SETTING THE VIRTUAL CONSTRAINT SIZES
-					//maxDisp_Franka.setConstant(virtConstraintSize_Franka);
+					maxDisp_Franka.setConstant(virtConstraintSize_Franka);
 					maxDisp_Ori_Franka.setConstant(virtConstraintRotSize_Franka);
 
 					// DEMO_exp 
-					maxDisp_Franka[0] = 0.025;
-					maxDisp_Franka[1] = 0.025;
-					maxDisp_Franka[2] = 0.025;
+					// maxDisp_Franka[0] = 0.05;
+					// maxDisp_Franka[1] = 0.05;
+					// maxDisp_Franka[2] = 0.05;
 										
 					// INITIALIZATION OF DESIRED AND CURRENT CONFIGURATION OF THE END-EFFECTOR FOR THE FRACTAL IMPEDANCE CONTROL
 					// DEMO
@@ -2559,7 +2562,7 @@ static void mainFranka(const char* frankaIP){
 					//std::cout << uoe::AxisToMatrix((uoe::MatrixToAxis(desCartOriMat)) + (uoe::MatrixToAxis(uoe::AxisToMatrix(hapticOri)))) << std::endl << std::endl;
 
 					// TESTING
-					if (gripperGapVec[0] >= 0.001){
+					if (abs(gripperGapVec[0]) >= 0.001){
 							gripperPressed = 0;
 							//std::cout << "new desired position ==> " << (preEndEff_DesPos3x1_Franka).transpose() << std::endl << std::endl;
 							//std::cout << "new desired orientation ==> " << preTargetCartMat_Franka << std::endl << std::endl;
@@ -3821,17 +3824,17 @@ int main(int argc, char** argv) {
   plot.clear();
    
 	// DEMO
-  //Stop and wait for franka thread to finish
-  frankaIsDone.store(true);
-  frankaRightThread.join();
+  	//Stop and wait for franka thread to finish
+  	frankaIsDone.store(true);
+  	frankaRightThread.join();
 	//frankaLeftThread.join();
-  guiThread.join();
-  mainDataPrintThread.join();
-	timeDelayThread.join();
+  	guiThread.join();
+  	mainDataPrintThread.join();
+	// timeDelayThread.join();
     
-  //Stop and wait for haptic thread to finish
-  hapticIsDone.store(true);
-  //hapticThreadLeft.join();
+  	//Stop and wait for haptic thread to finish
+  	hapticIsDone.store(true);
+  	//hapticThreadLeft.join();
   	
   hapticThreadRight.join();
 
